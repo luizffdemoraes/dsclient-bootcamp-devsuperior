@@ -9,8 +9,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import br.com.lffm.dsclient.dto.ClientDTO;
@@ -18,7 +16,6 @@ import br.com.lffm.dsclient.entities.Client;
 import br.com.lffm.dsclient.repositories.ClientRepository;
 import br.com.lffm.dsclient.services.exceptions.DataBaseException;
 import br.com.lffm.dsclient.services.exceptions.ResourceNotFoundException;
-import javassist.NotFoundException;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,9 +37,9 @@ public class ClientService {
 	}
 
 	@Transactional(readOnly = true)
-	public ClientDTO findById(Long id) throws Exception {
+	public ClientDTO findById(Long id) {
 		Optional<Client> obj = repository.findById(id);
-		Client entity = obj.orElseThrow(() -> new Exception("Entity not found"));
+		Client entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
 		return new ClientDTO(entity);
 	}
 
@@ -53,20 +50,20 @@ public class ClientService {
 	}
 
 	@Transactional
-	public ClientDTO update(Long id, ClientDTO dto) throws Exception {
+	public ClientDTO update(Long id, ClientDTO dto)  {
 		try {
 			Client entity = repository.getOne(id);
 			copyDtoToEntity(dto, entity);
 			entity = repository.save(entity);
 			return new ClientDTO(entity);
 		} catch (EntityNotFoundException e) {
-			throw new Exception("Id not found " + id);
+			throw new ResourceNotFoundException("Id not found " + id);
 		}
 
 	}
 	
 	
-	public void delete(Long id) throws Exception {
+	public void delete(Long id) {
 		try {
 			repository.deleteById(id);
 			
