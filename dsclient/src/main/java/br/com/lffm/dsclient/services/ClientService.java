@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import br.com.lffm.dsclient.dto.ClientDTO;
 import br.com.lffm.dsclient.entities.Client;
 import br.com.lffm.dsclient.repositories.ClientRepository;
+import br.com.lffm.dsclient.services.exceptions.DataBaseException;
+import br.com.lffm.dsclient.services.exceptions.ResourceNotFoundException;
 import javassist.NotFoundException;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -62,6 +64,19 @@ public class ClientService {
 		}
 
 	}
+	
+	
+	public void delete(Long id) throws Exception {
+		try {
+			repository.deleteById(id);
+			
+		} catch (EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException("Id not found " + id);
+		} catch (DataIntegrityViolationException e) {
+			throw new DataBaseException("Integrity violation");
+		}
+	}
+	
 
 	private void copyDtoToEntity(ClientDTO dto, Client entity) {
 		entity.setName(dto.getName());
@@ -72,15 +87,6 @@ public class ClientService {
 	}
 
 	
-	public void delete(Long id) throws Exception {
-		try {
-			repository.deleteById(id);
-			
-		} catch (EmptyResultDataAccessException e) {
-			throw new RuntimeException("Id not found " + id);
-		} catch (DataIntegrityViolationException e) {
-			throw new RuntimeException("Integrity violation");
-		}
-	}
+
 
 }
