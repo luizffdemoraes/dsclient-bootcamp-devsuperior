@@ -9,8 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import br.com.lffm.dsclient.dto.ClientDTO;
-
 @Entity
 @Table(name = "tb_client")
 public class Client implements Serializable {
@@ -38,6 +36,12 @@ public class Client implements Serializable {
 
 	public Long getId() {
 		return id;
+	}
+	
+	
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -79,5 +83,7 @@ public class Client implements Serializable {
 	public void setChildren(Integer children) {
 		this.children = children;
 	}
+
+
 
 }

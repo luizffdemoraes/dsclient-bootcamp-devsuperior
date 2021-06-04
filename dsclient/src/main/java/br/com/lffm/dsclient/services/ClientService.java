@@ -8,6 +8,8 @@ import br.com.lffm.dsclient.entities.Client;
 import br.com.lffm.dsclient.repositories.ClientRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sun.el.stream.Optional;
+
 @Service
 public class ClientService {
 	
@@ -33,6 +35,13 @@ public class ClientService {
 		entity.setIncome(dto.getIncome());
 		entity.setBirthDate(dto.getBirthDate());
 		entity.setChildren(dto.getChildren());
+	}
+
+
+	public ClientDTO findById(Long id) throws Exception {
+		java.util.Optional<Client> obj = repository.findById(id);
+		Client entity = obj.orElseThrow(() -> new Exception("Entity not found"));
+		return new ClientDTO(entity);
 	}
 
 	
